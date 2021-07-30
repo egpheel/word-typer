@@ -1,0 +1,39 @@
+
+html {
+  box-sizing: border-box;
+  font-size: 1.5rem;
+  background-color: #222222;
+}
+
+body {
+  margin: 1rem;
+  font-family: 'Trebuchet MS', sans-serif;
+  line-height: 1.5;
+}
+
+.content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.correct {
+  color: #00ee00;
+}
+
+#word {
+  text-align: center;
+  font-size: 2rem;
+  color: #cccccc;
+}
+
+#timer {
+  text-align: center;
+  color: #aaaaaa;
+}
+
+#start {
+  text-align: center;
+  color: #7f7f7f;
+}
