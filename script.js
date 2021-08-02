@@ -29,10 +29,14 @@ function handleKeys(e) {
   
   key = e.key
   
-  if (key == " " && !gameRunning) {
-    startGame()
+  if (key == " ") {
+    if (!gameRunning) {
+      startGame()
+    }
   } else {
-    paintWord(key)
+    if (gameRunning) {
+      paintWord(key)
+    }
   }
 }
 
