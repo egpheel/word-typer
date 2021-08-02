@@ -39,7 +39,7 @@ function handleKeys(e) {
 function paintWord(key){
   let w = word.split("")
   
-  if (key == w[currentLetter]) {
+  if (key.toLowerCase() == w[currentLetter]) {
     if (currentLetter >= w.length - 1) {
       clearTimeout(timer)
       gameOver()
