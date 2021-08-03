@@ -3,6 +3,7 @@ html {
   box-sizing: border-box;
   font-size: 1.5rem;
   background-color: #222222;
+  cursor: default;
 }
 
 body {
@@ -40,4 +41,22 @@ body {
 #start {
   text-align: center;
   color: #7f7f7f;
+}
+
+#url {
+  text-align: center;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 0.8rem;
+  position: fixed;
+  width:35%;
+  background-color: transparent;
+  border: 0;
+  outline: none;
+  bottom: 1rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+  color: #4c4c4c;
+  border-bottom: 2px solid #5b5b5b;
+  padding-bottom: 5px;
+  cursor: default;
 }

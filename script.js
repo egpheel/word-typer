@@ -1,14 +1,20 @@
+let originalURL = window.location.href.split('?')[0] // original URL without specified word
 let word = window.location.href.split('?')[1] // get the word from the URL (after '?')
 let currentLetter = 0 // current letter index, starts at 0
 let gameRunning = false // is the game running?, starts false
 
 let timer // global timer variable
 
+let canCopy = true
+
 const startContainer = document.querySelector('#start') // #start div
 const wordContainer = document.querySelector('#word') // #word div
 const timerContainer = document.querySelector('#timer') // #timer div
+const URLContainer = document.querySelector('#url') // #url div
+const invisibleInput = document.querySelector('#urlInput') // invisible input
 
 document.addEventListener('keydown', handleKeys) // listen for key presses
+URLContainer.addEventListener('click', copyUrlToClipboard) // listen for clicks on the URL div
 
 const possibleWords = [
   "the",
@@ -1020,13 +1026,19 @@ function checkWordInURL() {
     word = possibleWords[Math.floor(Math.random() * possibleWords.length)]
   }
   
+  // show URL
+  URLContainer.value = originalURL + '?' + word
+  
   // replace all instances of the weird space character thingy with a space
   word = word.replace(/%20/g, ' ')
+  
+  // replace title
+  document.title = document.title + ' - ' + word
 }
 
 // utility function to blur/unblur the div
-function blurWord(container, value) {
-  if (!value) {
+function blurWord(container, doBlur) {
+  if (!doBlur) {
     if (container.classList.contains('blurry')) {
       container.classList.remove('blurry')
     }
@@ -1035,6 +1047,25 @@ function blurWord(container, value) {
       container.classList.add('blurry')
     }
   }
+}
+
+// utility function to copy URL to clipboard
+function copyUrlToClipboard() {
+  let timeToShowURLAgain = 4000
+  let originalText = URLContainer.value
+  
+  if (canCopy) {
+    URLContainer.select()
+    document.execCommand('copy')
+    URLContainer.value = 'Copied to clipboard!'
+    canCopy = false
+  }
+  
+  // reset the input text to the URL
+  setTimeout(function() {
+    URLContainer.value = originalText
+    canCopy = true
+  }, timeToShowURLAgain)
 }
 
 function showWord() {
