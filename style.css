@@ -28,6 +28,10 @@ body {
   color: #cccccc;
 }
 
+#word.blurry {
+  filter: blur(4px);
+}
+
 #timer {
   text-align: center;
   color: #aaaaaa;
