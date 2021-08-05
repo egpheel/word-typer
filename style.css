@@ -23,6 +23,10 @@ body {
   color: #00ee00;
 }
 
+.incorrect {
+  color: #ff1111;
+}
+
 #word {
   text-align: center;
   font-size: 2rem;

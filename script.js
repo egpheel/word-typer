@@ -1,20 +1,20 @@
-let originalURL = window.location.href.split('?')[0] // original URL without specified word
-let word = window.location.href.split('?')[1] // get the word from the URL (after '?')
-let currentLetter = 0 // current letter index, starts at 0
-let gameRunning = false // is the game running?, starts false
+let originalURL = window.location.href.split("?")[0]; // original URL without specified word
+let word = window.location.href.split("?")[1]; // get the word from the URL (after '?')
+let currentLetter = 0; // current letter index, starts at 0
+let gameRunning = false; // is the game running?, starts false
 
-let timer // global timer variable
+let timer; // global timer variable
 
-let canCopy = true
+let canCopy = true;
 
-const startContainer = document.querySelector('#start') // #start div
-const wordContainer = document.querySelector('#word') // #word div
-const timerContainer = document.querySelector('#timer') // #timer div
-const URLContainer = document.querySelector('#url') // #url div
-const invisibleInput = document.querySelector('#urlInput') // invisible input
+const startContainer = document.querySelector("#start"); // #start div
+const wordContainer = document.querySelector("#word"); // #word div
+const timerContainer = document.querySelector("#timer"); // #timer div
+const URLContainer = document.querySelector("#url"); // #url div
+const invisibleInput = document.querySelector("#urlInput"); // invisible input
 
-document.addEventListener('keydown', handleKeys) // listen for key presses
-URLContainer.addEventListener('click', copyUrlToClipboard) // listen for clicks on the URL div
+document.addEventListener("keydown", handleKeys); // listen for key presses
+URLContainer.addEventListener("click", copyUrlToClipboard); // listen for clicks on the URL div
 
 const possibleWords = [
   "the",
@@ -1018,117 +1018,151 @@ const possibleWords = [
 ]; // dictionary of words
 
 function checkWordInURL() {
-  blurWord(wordContainer, true)
-  
+  blurWord(wordContainer, true);
+
   // if no word specified on URL
-  if (word == null || word == '') {
+  if (word == null || word == "") {
     // set the word to a random word from the possibleWords dictionary
-    word = possibleWords[Math.floor(Math.random() * possibleWords.length)]
+    word = possibleWords[Math.floor(Math.random() * possibleWords.length)];
   }
-  
+
   // show URL
-  URLContainer.value = originalURL + '?' + word
-  
+  URLContainer.value = originalURL + "?" + word;
+
   // replace all instances of the weird space character thingy with a space
-  word = word.replace(/%20/g, ' ')
-  
+  word = word.replace(/%20/g, " ");
+
   // replace title
-  document.title = document.title + ' - ' + word
+  document.title = document.title + " - " + word;
 }
 
 // utility function to blur/unblur the div
 function blurWord(container, doBlur) {
   if (!doBlur) {
-    if (container.classList.contains('blurry')) {
-      container.classList.remove('blurry')
+    if (container.classList.contains("blurry")) {
+      container.classList.remove("blurry");
     }
   } else {
-    if (!container.classList.contains('blurry')) {
-      container.classList.add('blurry')
+    if (!container.classList.contains("blurry")) {
+      container.classList.add("blurry");
     }
   }
 }
 
 // utility function to copy URL to clipboard
 function copyUrlToClipboard() {
-  let timeToShowURLAgain = 4000
-  let originalText = URLContainer.value
-  
+  let timeToShowURLAgain = 4000;
+  let originalText = URLContainer.value;
+
   if (canCopy) {
-    URLContainer.select()
-    document.execCommand('copy')
-    URLContainer.value = 'Copied to clipboard!'
-    canCopy = false
+    URLContainer.select();
+    document.execCommand("copy");
+    URLContainer.value = "Copied to clipboard!";
+    canCopy = false;
   }
-  
+
   // reset the input text to the URL
   setTimeout(function() {
-    URLContainer.value = originalText
-    canCopy = true
-  }, timeToShowURLAgain)
+    URLContainer.value = originalText;
+    canCopy = true;
+  }, timeToShowURLAgain);
 }
 
 function showWord() {
   // split the word/sentence into an array of characters
-  let w = word.split('')
-  
+  let w = word.split("");
+
   // clear the #word div
-  wordContainer.innerHTML = ""
-  
+  wordContainer.innerHTML = "";
+
   // for each character in the array:
   w.forEach(function(letter, index) {
     // if the index of the character in the array is lower than the current word
     if (index < currentLetter) {
       // paint the character and show it
-      wordContainer.innerHTML += '<span class="correct">' + letter + '</span>'
+      wordContainer.innerHTML += '<span class="correct">' + letter + "</span>";
     } else {
       // show the character
-      wordContainer.innerHTML += '<span>' + letter + '</span>'
+      wordContainer.innerHTML += "<span>" + letter + "</span>";
     }
-  })
+  });
+}
+
+function wrongLetter() {
+  // split the word/sentence into an array of characters
+  let w = word.split("");
+
+  // clear the #word div
+  wordContainer.innerHTML = "";
+
+  // for each character in the array:
+  w.forEach(function(letter, index) {
+    // if the index of the character in the array is lower than the current word
+    if (index < currentLetter) {
+      // paint the character and show it
+      wordContainer.innerHTML += '<span class="correct">' + letter + "</span>";
+    } else if (index == currentLetter) {
+      // paint the character red briefly
+      wordContainer.innerHTML +=
+        '<span class="incorrect">' + letter + "</span>";
+
+      document.addEventListener(
+        "keyup",
+        function(e) {
+          showWord();
+        },
+        { once: true }
+      );
+    } else {
+      // show the character
+      wordContainer.innerHTML += "<span>" + letter + "</span>";
+    }
+  });
 }
 
 function handleKeys(e) {
-  let key = ''  
-  
-  key = e.key
-  
+  let key = "";
+
+  key = e.key;
+
   // was spacebar key pressed?
-  if (key == ' ') {
+  if (key == " ") {
     // if so and the game is not running start the game
     if (!gameRunning) {
-      startGame()
+      startGame();
     }
   } else {
     // if it wasn't and the game is running paint the letter that was pressed
     if (gameRunning) {
-      paintWord(key)
+      paintWord(key);
     }
   }
 }
 
-function paintWord(key){
+function paintWord(key) {
   // split the word/sentence into an array of characters
-  let w = word.split('')
-  
+  let w = word.split("");
+
   // if next character is a space move on to the following character
-  if (w[currentLetter] == ' ') {
-    currentLetter++
+  if (w[currentLetter] == " ") {
+    currentLetter++;
   }
-  
+
   // if the pressed key in lower case is equal to the next character
   if (key.toLowerCase() == w[currentLetter]) {
     // end the game if that was the last character
     if (currentLetter >= w.length - 1) {
-      clearTimeout(timer)
-      gameOver()
+      clearTimeout(timer);
+      gameOver();
     }
-    
+
     // move on to the following character
-    currentLetter++
-    
+    currentLetter++;
+
     // show the word
-    showWord()
+    showWord();
+  } else {
+    wrongLetter();
   }
 }
 
@@ -1138,10 +1172,10 @@ function textifyTime(t) {
 }
 
 function startGame() {
-  blurWord(wordContainer, false)
+  blurWord(wordContainer, false);
   // start with the first letter index
-  currentLetter = 0
-  
+  currentLetter = 0;
+
   // start the timer
   let start = new Date().getTime();
 
@@ -1149,32 +1183,31 @@ function startGame() {
     let now = new Date().getTime();
     let time = now - start;
 
-    timerContainer.innerHTML = textifyTime(time)
-    time++
-  }, 1)
-  
-  
+    timerContainer.innerHTML = textifyTime(time);
+    time++;
+  }, 1);
+
   // hide the #start div
   startContainer.hidden = true;
-  
+
   // show the word
-  showWord()
-  
+  showWord();
+
   // tell the game it's running
-  gameRunning = true
+  gameRunning = true;
 }
 
 function gameOver() {
   // tell the game it's not running
-  gameRunning = false
-  
+  gameRunning = false;
+
   // update and show the #start div
-  startContainer.innerHTML = 'Press Spacebar to restart'
+  startContainer.innerHTML = "Press Spacebar to restart";
   startContainer.hidden = false;
 }
 
 // check the URL for words
-checkWordInURL()
+checkWordInURL();
 
 // show the word
-showWord()
+showWord();
